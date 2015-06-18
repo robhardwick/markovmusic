@@ -115,7 +115,7 @@ class Music:
             for msg in self.generate_messages(msgs, msg_count, chains):
 
                 # Sleep
-                sleep(msg.time * self.args.time_factor)
+                sleep(msg.time * self.args.time_scale)
 
                 # Play message
                 output.send(msg)
@@ -144,11 +144,21 @@ class Music:
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('--input', default='input/bach')
-    parser.add_argument('--chain-len', type=int, default=8)
-    parser.add_argument('--time-factor', type=int, default=1)
-    parser.add_argument('--port', default=None)
-    parser.add_argument('--list-ports', action='store_true')
+    parser.add_argument('--input',
+                        default='input/bach', metavar='PATH',
+                        help='MIDI input, either a single file or a directory')
+    parser.add_argument('--chain-len',
+                        type=int, default=4, metavar='LENGTH',
+                        help='Length of Markov chains to generate')
+    parser.add_argument('--time-scale', metavar='SCALE',
+                        type=int, default=1,
+                        help='Temporal scale')
+    parser.add_argument('--port',
+                        default=None, metavar='NAME',
+                        help='Output MIDI port name')
+    parser.add_argument('--list-ports',
+                        action='store_true',
+                        help='List available MIDI ports')
 
     music = Music(parser.parse_args())
     music.run()
